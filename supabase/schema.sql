@@ -20,6 +20,28 @@ create table if not exists public.rooms (
   created_at timestamptz not null default now()
 );
 
+alter table public.rooms
+add column if not exists document_type text not null default 'project_plan';
+
+do $$
+begin
+  alter table public.rooms
+  add constraint rooms_document_type_check
+  check (
+    document_type in (
+      'technical_design',
+      'requirement_doc',
+      'project_plan',
+      'okr',
+      'meeting_notes',
+      'knowledge_base',
+      'product_roadmap'
+    )
+  );
+exception
+  when duplicate_object then null;
+end $$;
+
 create table if not exists public.room_members (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references public.rooms(id) on delete cascade,
