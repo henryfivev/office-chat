@@ -9,7 +9,8 @@ import { Field, Input, Select } from '@/components/ui/Field';
 import { generateInviteCode } from '@/lib/utils';
 import { ensureAnonymousSession, hasSupabaseEnv, supabase } from '@/lib/supabase';
 import { themeOptions } from '@/lib/theme';
-import type { ThemeType } from '@/types';
+import { documentTypeOptions } from '@/lib/documentTemplates';
+import type { DocumentType, ThemeType } from '@/types';
 import { useUserStore } from '@/store/userStore';
 
 export default function CreateRoomPage() {
@@ -18,6 +19,7 @@ export default function CreateRoomPage() {
   const setUser = useUserStore((state) => state.setUser);
   const [roomName, setRoomName] = useState('项目方案讨论');
   const [theme, setTheme] = useState<ThemeType>('feishu');
+  const [documentType, setDocumentType] = useState<DocumentType>('project_plan');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -38,6 +40,7 @@ export default function CreateRoomPage() {
           name: roomName.trim() || '未命名房间',
           invite_code: inviteCode,
           theme,
+          document_type: documentType,
           created_by: user.id
         });
 
@@ -68,9 +71,9 @@ export default function CreateRoomPage() {
 
         <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-soft">
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-slate-950">创建房间</h1>
+            <h1 className="text-2xl font-semibold text-slate-950">创建文档空间</h1>
             <p className="mt-2 text-sm text-slate-500">
-              房间创建后会生成邀请码，后续通过 `/room/{'{inviteCode}'}` 访问。
+              选择办公工具外观和文档模板，评论能力会附着在文档内容上。
             </p>
           </div>
 
@@ -81,7 +84,7 @@ export default function CreateRoomPage() {
           ) : null}
 
           <form className="grid gap-5" onSubmit={handleCreate}>
-            <Field label="房间名称">
+            <Field label="文档空间名称">
               <Input
                 value={roomName}
                 onChange={(event) => setRoomName(event.target.value)}
@@ -90,9 +93,19 @@ export default function CreateRoomPage() {
               />
             </Field>
 
-            <Field label="默认主题">
+            <Field label="办公工具外观">
               <Select value={theme} onChange={(event) => setTheme(event.target.value as ThemeType)}>
                 {themeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+
+            <Field label="文档模板">
+              <Select value={documentType} onChange={(event) => setDocumentType(event.target.value as DocumentType)}>
+                {documentTypeOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
@@ -104,7 +117,7 @@ export default function CreateRoomPage() {
 
             <Button disabled={loading || !hasSupabaseEnv}>
               {loading ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}
-              创建并进入
+              创建文档
             </Button>
           </form>
         </section>

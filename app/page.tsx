@@ -48,21 +48,21 @@ export default function HomePage() {
         <div className="max-w-3xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600">
             <MessagesSquare size={16} />
-            文档协作界面的实时聊天室
+            伪装成办公协作工具的实时沟通平台
           </div>
           <h1 className="text-5xl font-semibold tracking-normal text-slate-950 sm:text-6xl">
             OfficeChat
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-            创建一个伪装成办公文档的聊天室，通过邀请链接加入，支持实时消息、在线人数、图片和老板键。
+            打开后首先看到文档、知识库或协同编辑记录，评论、编辑记录和讨论区承载实时沟通。
           </p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-[1fr_1fr]">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft">
             <div className="mb-4">
-              <h2 className="text-lg font-semibold text-slate-950">开始一个房间</h2>
-              <p className="mt-1 text-sm text-slate-500">先设置昵称，进入房间后可继续使用。</p>
+              <h2 className="text-lg font-semibold text-slate-950">创建文档空间</h2>
+              <p className="mt-1 text-sm text-slate-500">先设置协作者昵称，进入后可发表评论。</p>
             </div>
             <div className="grid gap-4">
               <Field label="你的昵称">
@@ -75,14 +75,14 @@ export default function HomePage() {
               </Field>
               <Button onClick={handleCreate} disabled={!canContinue}>
                 <Plus size={16} />
-                创建房间
+                创建文档
               </Button>
             </div>
           </div>
 
           <form className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft" onSubmit={handleJoin}>
             <div className="mb-4">
-              <h2 className="text-lg font-semibold text-slate-950">加入已有房间</h2>
+              <h2 className="text-lg font-semibold text-slate-950">打开已有文档</h2>
               <p className="mt-1 text-sm text-slate-500">粘贴邀请链接或输入邀请码。</p>
             </div>
             <div className="grid gap-4">
@@ -95,7 +95,7 @@ export default function HomePage() {
               </Field>
               <Button disabled={!canContinue || !inviteDraft.trim()}>
                 <ArrowRight size={16} />
-                加入房间
+                打开文档
               </Button>
             </div>
           </form>

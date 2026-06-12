@@ -1,17 +1,18 @@
 # OfficeChat
 
-无需自建服务器的网页版文档伪装聊天室。技术栈为 Next.js App Router、React、TypeScript、Tailwind CSS、Zustand 和 Supabase。
+无需自建服务器、伪装成办公协作工具的实时沟通平台。用户第一眼看到的是文档、知识库或协同编辑记录，沟通能力通过评论、编辑记录和讨论区承载。
 
 ## 功能
 
-- 创建房间并生成邀请码
-- 通过 `/room/{inviteCode}` 加入房间
+- 创建文档空间并生成邀请码
+- 通过 `/room/{inviteCode}` 打开文档空间
 - Supabase 匿名登录
-- Postgres Changes 实时消息
-- Presence 在线人数
-- 图片消息上传到 Supabase Storage
-- 飞书文档、钉钉文档、腾讯文档三种主题
-- Esc 或 `Ctrl + \`` 老板键伪装文档页面
+- Postgres Changes 实时评论
+- Presence 当前协作者数量
+- 图片以附件形式插入，默认显示文件链接
+- Document Shell 文档模板：项目方案、技术设计、OKR、周报/纪要、需求文档、知识库、产品规划
+- FeishuRenderer、DingtalkRenderer、TencentDocRenderer 三套不同布局和评论渲染
+- Esc 或 `Ctrl + \`` 老板键切换纯文档模式，隐藏评论区和输入区
 
 ## 本地启动
 
@@ -45,8 +46,8 @@ supabase/policies.sql
 4. 在 Supabase Dashboard 中确认：
 
 - Authentication 开启 Anonymous sign-ins
-- Realtime 已对 `messages` 表生效
-- Storage bucket `chat-images` 存在且 public
+- Realtime 已对 `comments` 表生效
+- Storage bucket `doc-attachments` 存在且 public
 
 5. 启动开发服务器：
 
@@ -67,11 +68,12 @@ npm run typecheck
 ## 目录
 
 ```text
-app/                 Next.js App Router 页面
-components/chat/     聊天、消息列表、输入区、在线人数
-components/themes/   主题外壳和老板键伪装页面
-lib/                 Supabase、主题与工具函数
-store/               Zustand 状态
-types/               共享类型
-supabase/            建表与 RLS 策略
+app/                   Next.js App Router 页面
+components/comments/   评论输入与附件展示
+components/document/   Document Shell、目录、正文、文档空间
+components/themes/     三套 ThemeRenderer
+lib/                   Supabase、文档模板、主题与工具函数
+store/                 Zustand 状态
+types/                 共享类型
+supabase/              建表与 RLS 策略
 ```

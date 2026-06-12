@@ -5,6 +5,17 @@ create table if not exists public.rooms (
   name text not null,
   invite_code text unique not null,
   theme text not null default 'feishu' check (theme in ('feishu', 'dingtalk', 'tencent_doc')),
+  document_type text not null default 'project_plan' check (
+    document_type in (
+      'technical_design',
+      'requirement_doc',
+      'project_plan',
+      'okr',
+      'meeting_notes',
+      'knowledge_base',
+      'product_roadmap'
+    )
+  ),
   created_by uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now()
 );
@@ -19,7 +30,7 @@ create table if not exists public.room_members (
   unique(room_id, user_id)
 );
 
-create table if not exists public.messages (
+create table if not exists public.comments (
   id uuid primary key default gen_random_uuid(),
   room_id uuid not null references public.rooms(id) on delete cascade,
   user_id uuid not null references auth.users(id) on delete cascade,
@@ -31,15 +42,20 @@ create table if not exists public.messages (
   created_at timestamptz not null default now()
 );
 
-create index if not exists idx_messages_room_created_at
-on public.messages(room_id, created_at desc);
+create index if not exists idx_comments_room_created_at
+on public.comments(room_id, created_at desc);
 
-alter publication supabase_realtime add table public.messages;
+do $$
+begin
+  alter publication supabase_realtime add table public.comments;
+exception
+  when duplicate_object then null;
+end $$;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
-  'chat-images',
-  'chat-images',
+  'doc-attachments',
+  'doc-attachments',
   true,
   5242880,
   array['image/jpeg', 'image/png', 'image/webp', 'image/gif']

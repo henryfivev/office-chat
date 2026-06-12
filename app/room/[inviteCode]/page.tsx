@@ -1,4 +1,4 @@
-import { ChatRoom } from '@/components/chat/ChatRoom';
+import { DocumentRoom } from '@/components/document/DocumentRoom';
 
 export default function RoomPage({
   params
@@ -7,5 +7,5 @@ export default function RoomPage({
     inviteCode: string;
   };
 }) {
-  return <ChatRoom inviteCode={params.inviteCode.toUpperCase()} />;
+  return <DocumentRoom inviteCode={params.inviteCode.toUpperCase()} />;
 }
